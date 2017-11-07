@@ -6,7 +6,7 @@ set -o pipefail
 apt-get -y update
 apt-get -y clean
 
-apt-get install -y git vim-nox jq cgroup-lite build-essential
+apt-get install -y git vim-nox jq cgroup-lite build-essential ntp htop
 
 wget -qO- https://redirector.gvt1.com/edgedl/go/go1.9.2.linux-amd64.tar.gz | tar -C /usr/local -xzf -
 
