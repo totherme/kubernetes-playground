@@ -48,12 +48,21 @@ Vagrant.configure(2) do |config|
     # vb.gui = true
 
     # Customize the amount of memory on the VM:
-    vb.memory = 4096
+    vb.memory = 9216
 
     # set number of CPUs
     vb.cpus = 6
+
+    # add a second disk
+    vagrant_root = File.dirname(File.expand_path(__FILE__))
+    file_to_disk = File.join(vagrant_root, 'data.vdi')
+    unless File.exist?(file_to_disk)
+      vb.customize ['createhd', '--filename', file_to_disk, '--size', 50 * 1024]
+    end
+    vb.customize ['storageattach', :id, '--storagectl', 'SCSI', '--port', 2, '--device', 0, '--type', 'hdd', '--medium', file_to_disk]
   end
-  #
+
+
   # View the documentation for the provider you are using for more
   # information on available options.
 
