@@ -58,7 +58,8 @@ install_devtools() {
   apt-get -y update
   apt-get -y clean
 
-  apt-get install -y git vim-nox jq cgroup-lite build-essential ntp htop docker.io
+  apt-get install -y git vim-nox jq cgroup-lite build-essential ntp htop \
+    docker.io silversearcher-ag
 }
 
 setup_golang() {
