@@ -21,6 +21,8 @@ main() {
 }
 
 setup_workspace_disk() {
+  local fstab_line
+
   echo "About to set up the workspace disk"
   sudo -u "$VM_USER" mkdir -p "$WORKSPACE"
 
@@ -29,10 +31,18 @@ setup_workspace_disk() {
     if ! mount "$DISK_DEVICE" " $WORKSPACE " >/dev/null 2>&1 ; then
       echo "couldn't mount disk, so making a fresh FS"
       mkfs.ext4 "$DISK_DEVICE"
-      mount "$DISK_DEVICE" "$WORKSPACE"
-      chown "${VM_USER}.${VM_USER}" "$WORKSPACE"
     fi
+
+    fstab_line="${DISK_DEVICE}  ${WORKSPACE}  ext4  defaults,auto,noatime,nodiratime  0  2"
+    if ! grep -qF "$fstab_line" /etc/fstab
+    then
+      echo "$fstab_line" >> /etc/fstab
+    fi
+
+    mount "$WORKSPACE"
   fi
+
+  chown "${VM_USER}.${VM_USER}" "$WORKSPACE"
 
   mkdir -p "${DOCKER_DIR}"
   ln -s "${DOCKER_DIR}" /var/lib/docker || true
