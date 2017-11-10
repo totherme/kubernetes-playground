@@ -21,6 +21,8 @@ main() {
   configure_lsyncd
   service lsyncd restart
 
+  configure_docker
+
   cat /vagrant/vimrc >> /etc/vim/vimrc
 }
 
@@ -137,6 +139,10 @@ sync {
   }
 }
 EOF
+}
+
+configure_docker() {
+  adduser "$VM_USER" docker
 }
 
 main
