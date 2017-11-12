@@ -79,10 +79,4 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", inline: <<-SHELL
   sudo /vagrant/provision.sh
   SHELL
-
-  # Forwarding inotify events to the guest, see:
-  #    https://github.com/mhallin/vagrant-notify-forwarder
-  # $ vagrant plugin install vagrant-notify-forwarder
-  # run: sudo nohup /tmp/notify-forwarder receive -p 22020
-  config.notify_forwarder.port = 22020
 end

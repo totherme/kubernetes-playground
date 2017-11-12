@@ -16,11 +16,6 @@ main() {
   install_devtools
   setup_golang
   get_k8s_go_deps
-
-  install_lsyncd
-  configure_lsyncd
-  service lsyncd restart
-
   configure_docker
 
   cat /vagrant/vimrc >> /etc/vim/vimrc
@@ -82,63 +77,6 @@ get_k8s_go_deps() {
   sudo -u "$VM_USER" -E bash <<'EOF'
     source /etc/profile.d/go_env.sh
     go get -u github.com/jteeuwen/go-bindata/go-bindata
-EOF
-
-}
-
-install_lsyncd() {
-  local tmp_dir
-
-  apt-get -y install cmake lua5.2 liblua5.2-dev
-  tmp_dir="$(mktemp -d)"
-  #shellcheck disable=2064
-  trap "rm -rf -- $tmp_dir" EXIT
-
-  (
-    cd "$tmp_dir"
-    curl -L 'https://github.com/axkibe/lsyncd/archive/release-2.2.2.tar.gz' \
-      | tar -xzf -
-
-    cd lsyncd-release-*
-    mkdir build
-
-    cd build
-    cmake ..
-    make
-    make install
-
-    cp /vagrant/lsyncd.init /etc/init.d/lsyncd
-    chmod 750 /etc/init.d/lsyncd
-
-    systemctl daemon-reload
-  )
-}
-
-configure_lsyncd() {
-  local lsyncd_conf target source
-
-  lsyncd_conf='/etc/lsyncd/lsyncd.conf.lua'
-  target="${WORKSPACE}/go/src/k8s.io/kubernetes"
-  source='/vagrant/go/src/k8s.io/kubernetes'
-
-  mkdir -p "$( dirname "$lsyncd_conf" )"
-
-  sudo -u "$VM_USER" mkdir -p "$target"
-
-  cat <<EOF >"$lsyncd_conf"
-sync {
-  default.rsync,
-  source = "${source}",
-  target = "${target}",
-  delay  = 2,
-  delete = "running",
-  rsync  = {
-    archive = true,   -- use the archive flag in rsync
-    perms   = true,   -- Keep the permissions
-    owner   = true,   -- Keep the owner
-    _extra  = {"-a"}, -- Sometimes permissions and owners isn't copied correctly so the _extra can be used for any flag in rsync
-  }
-}
 EOF
 }
 
