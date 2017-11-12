@@ -48,10 +48,10 @@ Vagrant.configure(2) do |config|
     # vb.gui = true
 
     # Customize the amount of memory on the VM:
-    vb.memory = 9216
+    vb.memory = ENV.fetch('VM_MEM', 9216)
 
     # set number of CPUs
-    vb.cpus = 6
+    vb.cpus = ENV.fetch('VM_CPUS', 6)
 
     # add a second disk
     vagrant_root = File.dirname(File.expand_path(__FILE__))
