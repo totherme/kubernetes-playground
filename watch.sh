@@ -7,7 +7,7 @@ set -o pipefail
 
 readonly BASE_DIR="$(greadlink -f "$(dirname "$0")")"
 readonly VAGRANT_DOT_PATH="${BASE_DIR}/.vagrant"
-readonly LSYNCD_CONF="${VAGRANT_DOT_PATH}/lsynd.conf"
+readonly LSYNCD_CONF="${VAGRANT_DOT_PATH}/lsyncd.conf"
 readonly SSH_CONF="${VAGRANT_DOT_PATH}/ssh-conf"
 readonly LSYNCD_PID="${VAGRANT_DOT_PATH}/lsyncd.pid"
 
@@ -36,14 +36,14 @@ template_lsyncd_conf() {
 }
 
 start_lsyncd() {
-  local conf
+  local conf pidfile
 
-  conf="$1"
+  conf="${1:?"Expected a path to a config file in start_lsyncd"}"
+  pidfile="${2:?"Expected a path to a pidfile in start_lsyncd"}"
 
   # on macos lsyncd needs to run as root, as root permissions are needed to
   # listen for FS events
-  sudo lsyncd -nodaemon "$conf" &
-  echo "$!"
+  sudo lsyncd -pidfile $pidfile "$conf"
 }
 
 start() {
@@ -56,7 +56,7 @@ start() {
   get_ssh_conf "$host" > "$SSH_CONF"
   template_lsyncd_conf "$host" "$source_dir" "$target_dir" "$SSH_CONF" \
     > "$LSYNCD_CONF"
-  start_lsyncd "$LSYNCD_CONF" > "$LSYNCD_PID"
+  start_lsyncd "$LSYNCD_CONF" "$LSYNCD_PID"
 }
 
 stop() {
