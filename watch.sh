@@ -74,7 +74,6 @@ EOF
 
 main() {
   local action="${1:-usage}"
-  shift
 
   case "$action" in
     start) start "$@"    ;;
