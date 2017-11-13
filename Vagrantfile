@@ -48,10 +48,10 @@ Vagrant.configure(2) do |config|
     # vb.gui = true
 
     # Customize the amount of memory on the VM:
-    vb.memory = 9216
+    vb.memory = ENV.fetch('VM_MEM', 9216)
 
     # set number of CPUs
-    vb.cpus = 6
+    vb.cpus = ENV.fetch('VM_CPUS', 6)
 
     # add a second disk
     vagrant_root = File.dirname(File.expand_path(__FILE__))
@@ -79,10 +79,4 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", inline: <<-SHELL
   sudo /vagrant/provision.sh
   SHELL
-
-  # Forwarding inotify events to the guest, see:
-  #    https://github.com/mhallin/vagrant-notify-forwarder
-  # $ vagrant plugin install vagrant-notify-forwarder
-  # run: sudo nohup /tmp/notify-forwarder receive -p 22020
-  config.notify_forwarder.port = 22020
 end
