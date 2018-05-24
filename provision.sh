@@ -72,7 +72,7 @@ EOF
 }
 
 get_k8s_go_deps() {
-  echo "Getting k8s golang dependences"
+  echo "Getting k8s golang dependencies"
   source /etc/profile.d/go_env.sh
   CGO_ENABLED=0 go install -a -installsuffix cgo std
 
