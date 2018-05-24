@@ -14,7 +14,7 @@ DOCKER_DIR="${WORKSPACE}/docker_state"
 main() {
   setup_workspace_disk
   install_devtools
-  setup_golang
+  setup_golang '1.10.2'
   get_k8s_go_deps
   configure_docker
 
@@ -58,7 +58,9 @@ install_devtools() {
 }
 
 setup_golang() {
-  wget -qO- https://redirector.gvt1.com/edgedl/go/go1.9.2.linux-amd64.tar.gz \
+  local goVersion="${1:-1.10.2}"
+
+  wget -qO- "https://redirector.gvt1.com/edgedl/go/go${goVersion}.linux-amd64.tar.gz" \
     | tar -C /usr/local -xzf -
 
   # Set up $GOPATH and add go executables to $PATH
