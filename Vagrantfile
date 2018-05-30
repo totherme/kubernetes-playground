@@ -62,6 +62,7 @@ Vagrant.configure(2) do |config|
     vb.customize ['storageattach', :id, '--storagectl', 'SCSI', '--port', 2, '--device', 0, '--type', 'hdd', '--medium', file_to_disk]
   end
 
+  config.disksize.size = "20GB"
 
   # View the documentation for the provider you are using for more
   # information on available options.
