@@ -5,17 +5,22 @@ settings {
 sync {
   default.rsyncssh,
   targetdir = "<%= target_dir %>",
-  source = "<%= source_dir %>",
-  host   = "<%= host %>",
-  delay  = 2,
-  delete = "running",
-  rsync  = {
-    binary  = "/usr/local/bin/rsync",
-    archive = true,   -- use the archive flag in rsync
-    perms   = true,   -- Keep the permissions
-    owner   = true,   -- Keep the owner
-    rsh     = "/usr/bin/ssh -F <%= ssh_conf %>",
-    _extra  = {"-a"}, -- Sometimes permissions and owners isn't copied correctly so the _extra can be used for any flag in rsync
+  source    = "<%= source_dir %>",
+  host      = "<%= host %>",
+  delay     = 2,
+  delete    = "running",
+  exclude   = {
+    "/bin/**",
+    "/src/k8s.io/kubernetes/_output/**",
+    "/src/k8s.io/kubernetes/_artifacts/**",
+  },
+  rsync     = {
+    binary      = "/usr/local/bin/rsync",
+    archive     = true,   -- use the archive flag in rsync
+    perms       = true,   -- Keep the permissions
+    owner       = true,   -- Keep the owner
+    rsh         = "/usr/bin/ssh -F <%= ssh_conf %>",
+    _extra      = {"-a"}, -- Sometimes permissions and owners isn't copied correctly so the _extra can be used for any flag in rsync
   },
 }
 
