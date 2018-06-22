@@ -17,8 +17,23 @@ main() {
   setup_golang '1.10.2'
   get_k8s_go_deps
   configure_docker
+  install_bazel
 
   cat /vagrant/vimrc >> /etc/vim/vimrc
+}
+
+install_bazel() {
+  # https://docs.bazel.build/versions/master/install-ubuntu.html
+  apt-get install -y openjdk-8-jdk
+
+  echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8" \
+    > /etc/apt/sources.list.d/bazel.list
+
+  curl https://bazel.build/bazel-release.pub.gpg \
+    | sudo apt-key add -
+
+  apt-get -y update \
+    && apt-get install -y bazel
 }
 
 setup_workspace_disk() {
