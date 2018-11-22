@@ -14,7 +14,7 @@ DOCKER_DIR="${WORKSPACE}/docker_state"
 main() {
   setup_workspace_disk
   install_devtools
-  setup_golang '1.10.2'
+  setup_golang '1.11.2'
   get_k8s_go_deps
   configure_docker
   install_bazel
@@ -69,20 +69,19 @@ install_devtools() {
   apt-get -y clean
 
   apt-get install -y git vim-nox jq cgroup-lite build-essential ntp htop \
-    docker.io silversearcher-ag mercurial
+    docker.io silversearcher-ag mercurial liblz4-tool
 }
 
 setup_golang() {
+  local gimmeUrl='https://raw.githubusercontent.com/travis-ci/gimme/master/gimme'
+  local gimmePath='/usr/local/bin/gimme'
   local goVersion="${1:-1.10.2}"
 
-  wget -qO- "https://redirector.gvt1.com/edgedl/go/go${goVersion}.linux-amd64.tar.gz" \
-    | tar -C /usr/local -xzf -
+  chmod -p "$(dirname "$gimmePath")"
+  curl -sL -o "$gimmePath" "$gimmeUrl"
+  chmod +x "$gimmePath"
 
-  # Set up $GOPATH and add go executables to $PATH
-  cat > /etc/profile.d/go_env.sh <<EOF
-  export GOPATH=/home/${VM_USER}/workspace/go
-  export PATH=\$GOPATH/bin:/usr/local/go/bin:\$PATH
-EOF
+  gimme "$goVersion" > /etc/profile.d/go_env.sh
   chmod +x /etc/profile.d/go_env.sh
 }
 

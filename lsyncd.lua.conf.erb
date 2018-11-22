@@ -23,6 +23,7 @@ sync {
     _extra      = {
       "-a",                        -- Sometimes permissions and owners isn't copied correctly so the _extra can be used for any flag in rsync
       "--filter=dir-merge,- .gitignore", -- ignore everything that is ignored by git
+      "-v",
     },
   },
 }
