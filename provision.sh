@@ -18,8 +18,22 @@ main() {
   get_k8s_go_deps
   configure_docker
   install_bazel
+  install_gcloud
 
   cat /vagrant/vimrc >> /etc/vim/vimrc
+}
+
+install_gcloud() {
+  local cloud_sdk_repo="cloud-sdk-$(lsb_release -c -s)"
+
+  echo "deb http://packages.cloud.google.com/apt ${cloud_sdk_repo} main" \
+    > /etc/apt/sources.list.d/google-cloud-sdk.list
+
+  curl https://packages.cloud.google.com/apt/doc/apt-key.gpg \
+    | apt-key add -
+
+  apt-get -y update \
+    && apt-get -y install google-cloud-sdk
 }
 
 install_bazel() {
