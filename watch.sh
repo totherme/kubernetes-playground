@@ -49,8 +49,8 @@ start_lsyncd() {
 start() {
   local target_dir source_dir host
 
-  source_dir="${BASE_DIR}/go"
-  target_dir="workspace/go"
+  source_dir="${BASE_DIR}/go/src"
+  target_dir="workspace/go/src"
   host='vagrant_k8s'
 
   get_ssh_conf "$host" > "$SSH_CONF"

@@ -10,9 +10,8 @@ sync {
   delay     = 2,
   delete    = "running",
   exclude   = {
-    "/bin/**",
-    "/src/k8s.io/kubernetes/_output/**",
-    "/src/k8s.io/kubernetes/_artifacts/**",
+    "/k8s.io/kubernetes/_output/**",
+    "/k8s.io/kubernetes/_artifacts/**",
   },
   rsync     = {
     binary      = "/usr/local/bin/rsync",
